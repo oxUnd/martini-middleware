@@ -1,0 +1,16 @@
+{
+    "res": {
+        "common:static/mod.js": {
+            "uri": "/static/mod.js",
+            "type": "js",
+            "pkg": "p0"
+        }
+    },
+    "pkg": {
+        "p0": {
+            "uri": "/static/pkg.js",
+            "has": ["common:static/mod.js"],
+            "type": "js"
+        }
+    }
+}
