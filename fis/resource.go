@@ -159,7 +159,12 @@ func (s Resource) Render(html string) *bytes.Buffer {
 	}
 
 	if js, ok := s.staticSet["js"]; ok {
-		str += "<script src=\"" + strings.Join(js, "\"></script><script src=\"") + "\"></script>"
+		for _, url := range(js) {
+			if url == s.Framework {
+				continue
+			}
+			str += `<script src="` + url + `"></script>`
+		}
 	}
 
 	html = strings.Replace(html, "</head>", str + "\n</head>", 1);
