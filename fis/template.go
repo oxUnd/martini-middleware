@@ -5,29 +5,30 @@ import (
 )
 
 //css placeholder
-const CONTENT_FIS_CSS_LINK_TAG = "<!--FIS_CSS_LINK-->";
+const CONTENT_FIS_CSS_LINK_TAG = "<!--FIS_CSS_LINK-->"
+
 //javascript placeholder
-const CONTENT_FIS_JAVASCRIPT_SCRIPT_TAG = "<!--FIS_JAVASCRIPT_SCRIPT-->";
+const CONTENT_FIS_JAVASCRIPT_SCRIPT_TAG = "<!--FIS_JAVASCRIPT_SCRIPT-->"
 
 const EMPTY = ""
 
 func Hello(s string) string {
-	return s;
+	return s
 }
 
-var Funcs = template.FuncMap {
-	"js": _js,
-	"css": _css,
+var Funcs = template.FuncMap{
+	"js":        _js,
+	"css":       _css,
 	"framework": _framework,
-	"require": _require,
-	"uri": _uri,
+	"require":   _require,
+	"uri":       _uri,
 }
 
 func _js() template.HTML {
 	return CONTENT_FIS_JAVASCRIPT_SCRIPT_TAG
 }
 
-func _css()  template.HTML {
+func _css() template.HTML {
 	return CONTENT_FIS_CSS_LINK_TAG
 }
 
@@ -43,7 +44,7 @@ func _require(args ...interface{}) string {
 	if len(args) == 2 {
 		boolStr := args[1].(string)
 		if boolStr == "true" {
-			async = true;
+			async = true
 		}
 	}
 
