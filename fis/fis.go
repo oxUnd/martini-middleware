@@ -1,20 +1,21 @@
-//Package fis is a middleware for Martini that provides easy JSON serialization and HTML template rendering and support FIS
+// Package fis is a middleware for Martini that provides easy JSON serialization and HTML template rendering and support FIS
 //
 // package main
+//
 // import (
 //     "github.com/go-martini/martini"
-//     "github.com/xiangshouding/martini-middleware/fis" //use fis
+//     "github.com/xiangshouding/martini-middleware/fis"
 // )
+//
 // func main() {
 //     m := martini.Classic()
-//     m.Use(martini.Static("public"))     //set static root
-//     //martini使用FIS martini-middleware
+//     m.Use(martini.Static("public"))
 //     m.Use(fis.Renderer(fis.Options{
-//         Directory:  "template",         //set template root
-//         Extensions: []string{".tpl"},   //support .tpl file
+//         Directory:  "template",
+//         Extensions: []string{".tpl"},
 //     }))
 //     m.Get("/", func(r fis.Render) {
-//         r.HTML(200, "page/index", "")   //render .tpl
+//         r.HTML(200, "page/index", "")
 //     })
 //     m.Run()
 // }
