@@ -11,12 +11,7 @@ import (
 func Test_Register(t *testing.T) {
 	__dir, _ := filepath.Abs("./")
 	Settings["root"] =  __dir + "/res/config"
-	res := &Resource{
-		make(map[string]interface {}),
-		make(map[string][]string),
-		make(map[string]interface {}),
-		make(map[string]string),
-	}
+	res := NewResource((map[string]string)(Settings))
 
 	ret := res.Register("test")
 	if (!ret) {
@@ -29,12 +24,7 @@ func Test_Register(t *testing.T) {
 func Test_getRes(t *testing.T) {
 	__dir, _ := filepath.Abs("./")
 	Settings["root"] = __dir + "/res/config"
-	res := &Resource{
-		make(map[string]interface {}),
-		make(map[string][]string),
-		make(map[string]interface {}),
-		make(map[string]string),
-	}
+	res := NewResource((map[string]string)(Settings))
 
 	ret, ok := res.getRes("common:static/mod.js")
 	expect(t, ok, true)
@@ -49,12 +39,7 @@ func Test_getRes(t *testing.T) {
 func Test_Load(t *testing.T) {
 	__dir, _ := filepath.Abs("./")
 	Settings["root"] = __dir + "/res/config"
-	res := &Resource{
-		make(map[string]interface {}),
-		make(map[string][]string),
-		make(map[string]interface {}),
-		make(map[string]string),
-	}
+	res := NewResource((map[string]string)(Settings))
 
 	uri := res.Load("common:static/mod.js", false);
 	expect(t, uri, "/static/pkg.js")

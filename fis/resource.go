@@ -23,17 +23,18 @@ var Settings = make (map[string]string)
 func NewResource(settings map[string]string) *Resource {
 	Settings = settings;
 	ret := &Resource{
+		"",
 		make(map[string]interface {}),
 		make(map[string][]string),
 		make(map[string]interface {}),
 		make(map[string]string),
 	}
-
 	return ret
 }
 
 //Resource
 type Resource struct {
+	Framework string
 	maps map[string]interface{}
 	staticSet map[string][]string
 	asyncSet map[string] interface {}
@@ -44,10 +45,14 @@ func (r Resource) Register(ns string) bool {
 	_, ok := r.maps[ns]
 
 	if !ok {
-		var path = Settings["root"] + "/" + ns + "-map.json";
+		var path = Settings["root"] + "/" + ns + "-map.json"
+		if ns == "__global__" {
+			path = Settings["root"] + "/map.json"
+		}
+
 		content, err := ioutil.ReadFile(path)
 		if err != nil {
-			log.Println("Can't found: " + path);
+			log.Println("Can't found: " + path)
 			return false;
 		}
 		buffer := bytes.NewBuffer(content)
@@ -55,7 +60,7 @@ func (r Resource) Register(ns string) bool {
 		var result map[string]interface {}
 		err = decoder.Decode(&result)
 		if err != nil {
-			log.Println("Can't a JSON file: " + path);
+			log.Println("Can't a JSON file: " + path)
 			return false;
 		}
 		r.maps[ns] = result;
@@ -64,13 +69,13 @@ func (r Resource) Register(ns string) bool {
 	return true;
 }
 
-func (r Resource) getStaticSet() [] string {
-	return r.staticSet
+func (r Resource) getStaticSet(typ string) [] string {
+	return r.staticSet[typ]
 }
 
 func (r Resource) getNamespace(id string) string {
 	p := strings.Index(id, ":")
-	ret := ""
+	ret := "__global__"
 	if (p != -1) {
 		ret = id[0:p]
 	}
@@ -83,7 +88,7 @@ func (r Resource) getRes(id string) (interface {}, bool) {
 	ret, ok := r.maps[ns]
 	if !ok {
 		log.Println("Can't load the map of resource: " + id)
-		return nil, true;
+		return nil, false
 	}
 	res := ret.(map[string]interface{})["res"];
 	return res.(map[string]interface{})[id],true
@@ -93,7 +98,7 @@ func (r Resource) Uri(id string) string {
 	res, ok := r.getRes(id)
 	if ok {
 		//get url return it!
-		return res.(map[string]string)["uri"]
+		return res.(map[string] interface{})["uri"].(string)
 	}
 	return ""
 }
@@ -140,5 +145,25 @@ func (r Resource) Load(id string, async bool) string {
 		}
 	}
 	return ret;
+}
+
+func (s Resource) Render(html string) *bytes.Buffer {
+	str := ""
+
+	if css, ok := s.staticSet["css"]; ok {
+		str += "<link rel=\"stylesheet\" href=\"" + strings.Join(css, "\" /><link rel=\"stylesheet\" href=\"") + "\" />"
+	}
+
+	if len(s.Framework) > 0 {
+		str += `<script src="`+s.Framework+`"></script>`
+	}
+
+	if js, ok := s.staticSet["js"]; ok {
+		str += "<script src=\"" + strings.Join(js, "\"></script><script src=\"") + "\"></script>"
+	}
+
+	html = strings.Replace(html, "</head>", str + "\n</head>", 1);
+
+	return bytes.NewBufferString(html)
 }
 
