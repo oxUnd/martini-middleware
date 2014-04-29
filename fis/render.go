@@ -1,4 +1,3 @@
-//License: github.com/martini-contrib/render
 package fis
 
 import (

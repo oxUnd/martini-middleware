@@ -102,12 +102,12 @@ func (r Resource) getRes(id string) (interface{}, bool) {
 	return res.(map[string]interface{})[id], true
 }
 
-//get the online url of a js or css file
+// get the online url of a js or css file
 func (r Resource) Uri(id string) string {
 	res, ok := r.getRes(id)
 	ret := ""
 	if ok {
-		//get url return it!
+		// get url return it!
 		resT := res.(map[string]interface{})
 		if pkg, have := resT["pkg"]; have {
 			pkgMap := r.maps[r.getNamespace(id)].(map[string]interface{})["pkg"]
@@ -121,7 +121,7 @@ func (r Resource) Uri(id string) string {
 	return ret
 }
 
-//load static
+// load static
 func (r Resource) Load(id string, async bool) string {
 	ret, ok := r._loaded[id]
 	if ok {
