@@ -41,6 +41,13 @@ type Resource struct {
 	_loaded map[string] string
 }
 
+func (s Resource) Reset() {
+	s.maps = nil;
+	s._loaded = nil;
+	s.staticSet = nil;
+	s.Framework = "";
+}
+
 func (r Resource) Register(ns string) bool {
 	_, ok := r.maps[ns]
 
@@ -168,7 +175,7 @@ func (s Resource) Render(html string) *bytes.Buffer {
 	}
 
 	html = strings.Replace(html, "</head>", str + "\n</head>", 1);
-
+	s.Reset()
 	return bytes.NewBufferString(html)
 }
 

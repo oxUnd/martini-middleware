@@ -17,8 +17,6 @@ func Renderer(options ...Options) martini.Handler {
 		"root": opt.Directory + "/config",
 	}
 
-	ResourceApi = NewResource((map[string]string)(s))
-
 	opt.Funcs = append(opt.Funcs, Funcs)
 	cs := prepareCharset(opt.Charset)
 	t := compile(opt)
@@ -32,6 +30,9 @@ func Renderer(options ...Options) martini.Handler {
 			// use a clone of the initial template
 			tc, _ = t.Clone()
 		}
+
+		ResourceApi = NewResource((map[string]string)(s))
+
 		c.MapTo(&renderer{res, req, tc, opt, cs}, (*Render)(nil))
 	}
 }
