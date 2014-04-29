@@ -103,11 +103,20 @@ func (r Resource) getRes(id string) (interface {}, bool) {
 
 func (r Resource) Uri(id string) string {
 	res, ok := r.getRes(id)
+	ret := ""
 	if ok {
 		//get url return it!
-		return res.(map[string] interface{})["uri"].(string)
+		resT := res.(map[string] interface{})
+		if pkg, have := resT["pkg"]; have {
+			pkgMap := r.maps[r.getNamespace(id)].(map[string] interface{})["pkg"]
+			resMap := pkgMap.(map[string]interface{})
+			_resMap := resMap[pkg.(string)].(map[string]interface{})
+			ret = _resMap["uri"].(string)
+		} else {
+			ret = res.(map[string] interface{})["uri"].(string);
+		}
 	}
-	return ""
+	return ret
 }
 
 func (r Resource) Load(id string, async bool) string {
