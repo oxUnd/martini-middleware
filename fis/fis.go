@@ -40,19 +40,19 @@ func Renderer(options ...Options) martini.Handler {
 
 	opt.Funcs = append(opt.Funcs, Funcs)
 	cs := prepareCharset(opt.Charset)
+	ResourceApi = NewResource((map[string]string)(s))
 	t := compile(opt)
 
 	return func(res http.ResponseWriter, req *http.Request, c martini.Context) {
 		var tc *template.Template
 		if martini.Env == martini.Dev {
+			ResourceApi = NewResource((map[string]string)(s))
 			// recompile for easy development
 			tc = compile(opt)
 		} else {
 			// use a clone of the initial template
 			tc, _ = t.Clone()
 		}
-
-		ResourceApi = NewResource((map[string]string)(s))
 
 		c.MapTo(&renderer{res, req, tc, opt, cs}, (*Render)(nil))
 	}
